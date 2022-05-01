@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
     public float Speed;
     public float JumpSpeed;
     Rigidbody2D rigid;
+    Animator animator;
+    SpriteRenderer spriteRenderer;
 
     public float LastX = 0;
     public float LastY = 0;
@@ -19,6 +21,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -43,12 +47,22 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.D))
         {
             rigid.AddForce(Vector2.right * Speed);
+            spriteRenderer.flipX = false;
         }
         else if (Input.GetKey(KeyCode.A))
         {
             rigid.AddForce(Vector2.left * Speed);
+            spriteRenderer.flipX = true;
         }
-        if(windType == WindType.Right)
+        if ((Input.GetKey(KeyCode.D) && rigid.velocity.x > 0.2f) || (Input.GetKey(KeyCode.A) && rigid.velocity.x < -0.2f))
+        {
+            animator.SetBool("IsWalking", true);
+        }
+        else
+        {
+            animator.SetBool("IsWalking", false);
+        }
+        if (windType == WindType.Right)
         {
             rigid.AddForce(Vector2.right * 20);
         }
