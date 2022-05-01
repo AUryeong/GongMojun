@@ -454,7 +454,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 18.022383, y: 25.42}
-    newSize: {x: 1, y: 1}
+    newSize: {x: 18.022383, y: 25.42}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -507,7 +507,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 18.022383, y: 25.42}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -521,8 +521,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 623072838}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.69, y: -3.16, z: 0}
-  m_LocalScale: {x: 0.07167378, y: 0.075894155, z: 0.12092759}
+  m_LocalPosition: {x: -6.6413, y: -3.0872, z: 0}
+  m_LocalScale: {x: 0.07708387, y: 0.08162281, z: 0.13005546}
   m_Children:
   - {fileID: 519420032}
   m_Father: {fileID: 0}

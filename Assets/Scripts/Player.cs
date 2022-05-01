@@ -57,6 +57,7 @@ public class Player : MonoBehaviour
         if ((Input.GetKey(KeyCode.D) && rigid.velocity.x > 0.2f) || (Input.GetKey(KeyCode.A) && rigid.velocity.x < -0.2f))
         {
             animator.SetBool("IsWalking", true);
+            animator.speed = Mathf.Abs(rigid.velocity.x)/10;
         }
         else
         {
