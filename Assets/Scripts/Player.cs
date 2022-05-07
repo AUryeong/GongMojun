@@ -4,16 +4,24 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [Header("플레이어 스탯")]
+    public float Dmg;
+    public float atspd;
+    public float defense;
+    public float stamina;
     public float Speed;
     public float JumpSpeed;
+    [Space(20f)]
+
     Rigidbody2D rigid;
     Animator animator;
     SpriteRenderer spriteRenderer;
 
     public float LastX = 0;
     public float LastY = 0;
-    public WindType windType;
-    public enum WindType
+    public EWindDir eWindDir;
+    
+    public enum EWindDir//E는 (enum타입이라서 명시)
     {
         Right,
         Left
@@ -33,7 +41,7 @@ public class Player : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.F))
         {
-            windType = (WindType)(((int)windType + 1) % 2);
+            eWindDir = (EWindDir)(((int)eWindDir + 1) % 2);
         }
         if (rigid.velocity.x != 0 || rigid.velocity.y != 0)
         {
@@ -63,7 +71,7 @@ public class Player : MonoBehaviour
         {
             animator.SetBool("IsWalking", false);
         }
-        if (windType == WindType.Right)
+        if (eWindDir == EWindDir.Right)
         {
             rigid.AddForce(Vector2.right * 20);
         }

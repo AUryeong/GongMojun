@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Wind : MonoBehaviour
 {
     private void Start()
     {
-        Object[] A = GameObject.FindObjectsOfType(typeof(Obj));
+        //Object[] A = GameObject.FindObjectsOfType(typeof(Obj));
     }
     private void Update()
     {
