@@ -5,6 +5,7 @@ using System;
 
 public class Player : MonoBehaviour
 {
+
     [Header("플레이어 스탯")]
     public float Dmg;
     public float atspd;
@@ -12,6 +13,8 @@ public class Player : MonoBehaviour
     public float stamina;
     public float Speed;
     public float JumpSpeed;
+
+
     [Space(20f)]
 
     Rigidbody2D rigid;
@@ -21,7 +24,7 @@ public class Player : MonoBehaviour
     public float LastX = 0;
     public float LastY = 0;
     public EWindDir eWindDir;
-    
+
     public enum EWindDir//E는 (enum타입이라서 명시)
     {
         Right,
@@ -75,7 +78,7 @@ public class Player : MonoBehaviour
         if ((Input.GetKey(KeyCode.D) && rigid.velocity.x > 0.2f) || (Input.GetKey(KeyCode.A) && rigid.velocity.x < -0.2f))
         {
             animator.SetBool("IsWalking", true);
-            animator.speed = Mathf.Abs(rigid.velocity.x)/10;
+            animator.speed = Mathf.Abs(rigid.velocity.x) / 10;
         }
         else
         {
@@ -90,5 +93,5 @@ public class Player : MonoBehaviour
             rigid.AddForce(Vector2.left * 10);
         }
     }
-   
+
 }

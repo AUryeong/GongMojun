@@ -24,8 +24,8 @@ public class GameManager : MonoBehaviour
     private Rigidbody2D rb;
     private Player player;
     private Enemy enemy;
-    
-    
+
+
     private static GameManager instance;
 
     public static GameManager Instance
@@ -38,32 +38,45 @@ public class GameManager : MonoBehaviour
             }
             return instance;
         }
-        
+
     }
     private void Start()
     {
-        
+
         rb = GetComponent<Rigidbody2D>();
         player = GetComponent<Player>();
         enemy = GetComponent<Enemy>();
     }
-    public void Wind(EWindType WindType,Vector2 dir ,float stat ,float force = 1)//바람의 종류, 방량, 힘
+
+    public void Wind(EWindType WindType, Vector2 dir, float playerdefense, float playerdmg, float enemystat, float force = 1)//바람의 종류, 방량, 힘
     {
-        float temp = stat;//초기값 저장
+        float p_defense = playerdefense;//초기값 저장
+        float Dmg = playerdmg;
+        float e_stat = enemystat;
+
+        int index = (int)WindType - 1;
+
+        p_defense = new float[4]
+        { player.defense + (player.defense / 2),player.defense - (player.defense / 2) , playerdefense, playerdefense }[index];
+        Dmg = new float[4]
+            {player.Dmg - (player.Dmg / 4), 0, playerdmg, playerdmg}[index];
+        e_stat = new float[] { enemy.defense + (enemy.defense / 4), 0, enemy.defense, enemy.defense }[index];
+        
+
         switch (WindType)//강풍과 돌풍은 추가예정
         {
             case EWindType.Contrarywind://역풍
-                rb.AddForce(dir * force,ForceMode2D.Force);
-
-                player.defense = player.defense + (player.defense / 2);
-                player.Dmg = player.Dmg - (player.Dmg / 4);
-
-                enemy.defense = enemy.defense + (enemy.defense / 4);
+                rb.AddForce(dir * force, ForceMode2D.Force);
+                player.defense = p_defense;
+                player.Dmg = Dmg;
+                enemy.defense = e_stat;
                 //현재 플레이어의 방어력 + (현재 플레이어의 방어력/2)
                 break;
             case EWindType.Fairwind://순풍
                 rb.AddForce(dir * force, ForceMode2D.Force);
-
+                player.defense = p_defense;
+                player.Dmg = Dmg;
+                enemy.Dmg = e_stat; 
                 break;
             case EWindType.Sirocco://열풍
                 rb.AddForce(dir * force, ForceMode2D.Force);
