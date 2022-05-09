@@ -1,13 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public enum EWindType
+{
+    Contrarywind = 1,//¿ªÇ³
+    Fairwind,//¼øÇ³
+    Sirocco,//¿­Ç³
+    Coldwind,//³ÃÇ³
+    Gale,//°­Ç³
+    Squall//µ¹Ç³
+}
+public enum EObjType
+{
+    Player,
+    Enemy
+}
 
 public class GameManager : MonoBehaviour
 {
+    public List<EWindType> eWindTypes = new List<EWindType>();
+
 
     private Rigidbody2D rb;
-    private Player playerstat;
     private Player player;
+    private Enemy enemy;
+    
     
     private static GameManager instance;
 
@@ -25,9 +42,10 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        player = FindObjectOfType<Player>();
+        
         rb = GetComponent<Rigidbody2D>();
-        playerstat = GetComponent<Player>();
+        player = GetComponent<Player>();
+        enemy = GetComponent<Enemy>();
     }
     public void Wind(EWindType WindType,Vector2 dir ,float stat ,float force = 1)//¹Ù¶÷ÀÇ Á¾·ù, ¹æ·®, Èû
     {
@@ -36,7 +54,11 @@ public class GameManager : MonoBehaviour
         {
             case EWindType.Contrarywind://¿ªÇ³
                 rb.AddForce(dir * force,ForceMode2D.Force);
-                
+
+                player.defense = player.defense + (player.defense / 2);
+                player.Dmg = player.Dmg - (player.Dmg / 4);
+
+                enemy.defense = enemy.defense + (enemy.defense / 4);
                 //ÇöÀç ÇÃ·¹ÀÌ¾îÀÇ ¹æ¾î·Â + (ÇöÀç ÇÃ·¹ÀÌ¾îÀÇ ¹æ¾î·Â/2)
                 break;
             case EWindType.Fairwind://¼øÇ³
@@ -52,5 +74,4 @@ public class GameManager : MonoBehaviour
         }
 
     }
-    
 }

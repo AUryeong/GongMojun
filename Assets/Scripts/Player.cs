@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Player : MonoBehaviour
 {
@@ -25,6 +26,15 @@ public class Player : MonoBehaviour
     {
         Right,
         Left
+    }
+    public enum EIsWind
+    {
+        Contrarywind = 1,//¿ªÇ³
+        Fairwind,//¼øÇ³
+        Sirocco,//¿­Ç³
+        Coldwind,//³ÃÇ³
+        Gale,//°­Ç³
+        Squall//µ¹Ç³
     }
     void Start()
     {
@@ -80,4 +90,5 @@ public class Player : MonoBehaviour
             rigid.AddForce(Vector2.left * 10);
         }
     }
+   
 }

@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class Wind : MonoBehaviour
 {
+    private Player player;
+    private Enemy enemy;
+    private void Awake()
+    {
+        player = GetComponent<Player>();
+        enemy = GetComponent<Enemy>();
+    }
     private void Start()
     {
         //Object[] A = GameObject.FindObjectsOfType(typeof(Obj));
@@ -15,6 +22,10 @@ public class Wind : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.CompareTag("Player"))
+        {
+            
+        }
         
     }
 }

@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Header("±‚∫ªΩ∫≈»")]
+    public float Dmg;
+    public float atspd;
+    public float defense;
+    public float Speed;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
+
 }

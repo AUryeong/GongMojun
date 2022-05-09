@@ -2,15 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EWindType
-{
-    Contrarywind = 1,//¿ªÇ³
-    Fairwind,//¼øÇ³
-    Sirocco,//¿­Ç³
-    Coldwind,//³ÃÇ³
-    Gale,//°­Ç³
-    Squall//µ¹Ç³
-}
+
 public class Obj : MonoBehaviour
 {
     public bool isWind = true;
@@ -50,5 +42,6 @@ public class Obj : MonoBehaviour
             intwindtype = (int)EWindType.Squall;
         }
     }
-    
+   
+
 }
