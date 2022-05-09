@@ -3,16 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Player : MonoBehaviour
+public class Player : Obj
 {
 
     [Header("플레이어 스탯")]
-    public float Dmg;
-    public float atspd;
-    public float defense;
-    public float stamina;
-    public float Speed;
-    public float JumpSpeed;
+    
 
 
     [Space(20f)]

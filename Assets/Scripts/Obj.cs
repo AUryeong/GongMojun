@@ -5,6 +5,20 @@ using UnityEngine;
 
 public class Obj : MonoBehaviour
 {
+    [SerializeField]
+    protected float Dmg;
+    [SerializeField]
+    protected float atspd;
+    [SerializeField]
+    protected float defense;
+    [SerializeField]
+    protected float stamina;
+    [SerializeField]
+    protected float Speed;
+    [SerializeField]
+    protected float JumpSpeed;
+
+
     public bool isWind = true;
     public int intwindtype = (int)EWindType.Contrarywind;
 
@@ -41,6 +55,7 @@ public class Obj : MonoBehaviour
         {
             intwindtype = (int)EWindType.Squall;
         }
+        
     }
    
 
