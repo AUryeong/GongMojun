@@ -50,4 +50,5 @@ public class Obj : MonoBehaviour
             intwindtype = (int)EWindType.Squall;
         }
     }
+    
 }
