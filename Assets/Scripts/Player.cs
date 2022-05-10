@@ -3,17 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Player : Obj
+public class Player : Unit
 {
 
     [Header("플레이어 스탯")]
 
-    public float dmg;
-    public float atspd;
-    public float defense;
-    public float maxStamina;
-    public float Speed;
-    public float JumpSpeed;
+    
 
 
     [Space(20f)]
@@ -62,8 +57,9 @@ public class Player : Obj
         }
     }
 
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
+        base.FixedUpdate();
         if (Input.GetKey(KeyCode.D))
         {
             rigid.AddForce(Vector2.right * Speed);
