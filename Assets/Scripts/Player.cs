@@ -7,7 +7,7 @@ public class Player : Obj
 {
 
     [Header("ÇÃ·¹ÀÌ¾î ½ºÅÈ")]
-   
+
     public float dmg;
     public float atspd;
     public float defense;
@@ -30,15 +30,6 @@ public class Player : Obj
     {
         Right = 1,
         Left = -1
-    }
-    public enum EIsWind
-    {
-        Contrarywind = 1,//¿ªÇ³
-        Fairwind,//¼øÇ³
-        Sirocco,//¿­Ç³
-        Coldwind,//³ÃÇ³
-        Gale,//°­Ç³
-        Squall//µ¹Ç³
     }
     void Start()
     {
@@ -100,32 +91,33 @@ public class Player : Obj
         {
             rigid.AddForce(Vector2.left * 10);
         }
-    //    #region ¹Ù¶÷Á¾·ù ¹Ù²Ù±â Å°ÀÔ·Â
-    //    if (Input.GetKeyDown(KeyCode.Alpha0))
-    //    {
-    //        intwindtype = (int)EWindType.Contrarywind;
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.Alpha1))
-    //    {
-    //        intwindtype = (int)EWindType.Fairwind;
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.Alpha2))
-    //    {
-    //        intwindtype = (int)EWindType.Sirocco;
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.Alpha3))
-    //    {
-    //        intwindtype = (int)EWindType.Coldwind;
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.Alpha4))
-    //    {
-    //        intwindtype = (int)EWindType.Gale;
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.Alpha5))
-    //    {
-    //        intwindtype = (int)EWindType.Squall;
-    //    }
-    //    #endregion
-    //}
+        //    #region ¹Ù¶÷Á¾·ù ¹Ù²Ù±â Å°ÀÔ·Â
+        //    if (Input.GetKeyDown(KeyCode.Alpha0))
+        //    {
+        //        intwindtype = (int)EWindType.Contrarywind;
+        //    }
+        //    else if (Input.GetKeyDown(KeyCode.Alpha1))
+        //    {
+        //        intwindtype = (int)EWindType.Fairwind;
+        //    }
+        //    else if (Input.GetKeyDown(KeyCode.Alpha2))
+        //    {
+        //        intwindtype = (int)EWindType.Sirocco;
+        //    }
+        //    else if (Input.GetKeyDown(KeyCode.Alpha3))
+        //    {
+        //        intwindtype = (int)EWindType.Coldwind;
+        //    }
+        //    else if (Input.GetKeyDown(KeyCode.Alpha4))
+        //    {
+        //        intwindtype = (int)EWindType.Gale;
+        //    }
+        //    else if (Input.GetKeyDown(KeyCode.Alpha5))
+        //    {
+        //        intwindtype = (int)EWindType.Squall;
+        //    }
+        //    #endregion
+        //}
+    }
 
 }

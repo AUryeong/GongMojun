@@ -1,6 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public enum EWindType
+{
+    Contrarywind = 1,//역풍
+    Fairwind,//순풍
+    Sirocco,//열풍
+    Coldwind,//냉풍
+    Gale,//강풍
+    Squall//돌풍
+}
+public enum EObjType
+{
+    player,
+    enemy
+}
+public enum EWindDir
+{
+    Right = 1,
+    Left = -1
+}
+
+
+
 
 
 public class Wind : MonoBehaviour
@@ -9,7 +31,9 @@ public class Wind : MonoBehaviour
     private Player player;
     [SerializeField]
     private Enemy enemy;
-    
+    private int intwindtype = (int)EWindType.Contrarywind;
+    private Vector2 dir;
+    private bool isdir;
 
     private Rigidbody2D rb;
     private void Awake()
@@ -20,62 +44,96 @@ public class Wind : MonoBehaviour
     }
     private void Start()
     {
-        //Object[] A = GameObject.FindObjectsOfType(typeof(Obj));
     }
-    private void Update()
+    private void FixedUpdate()
     {
-       
+        #region 바람 방향바꾸기
+        if (Input.GetKeyDown(KeyCode.Space) && isdir == true)
+        {
+            dir = new Vector2((int)EWindDir.Right, 0);
+            isdir = false;
+        }
+        else if (Input.GetKeyDown(KeyCode.Space) && isdir == false)
+        {
+            dir = new Vector2((int)EWindDir.Left, 0);
+            isdir = true;
+        }
+        #endregion
+        
+        #region 바람종류 바꾸기 키입력
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            intwindtype = (int)EWindType.Contrarywind;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            intwindtype = (int)EWindType.Fairwind;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            intwindtype = (int)EWindType.Sirocco;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            intwindtype = (int)EWindType.Coldwind;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            intwindtype = (int)EWindType.Gale;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            intwindtype = (int)EWindType.Squall;
+        }
+        #endregion
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.CompareTag("Player") && collision.CompareTag("Enemy"))
+        {
+            WindFnc(EObjType.player, intwindtype, dir, player.defense, player.dmg);
+
+        }
     }
-    public void playerWind(EWindType WindType, Vector2 dir, float playerdefense, float playerdmg, float enemystat, float force = 1)//바람의 종류, 방량, 힘
+    public void WindFnc(EObjType ObjType, int WindType, Vector2 dir, float playerdefense, float playerdmg, float force = 1)//바람의 종류, 방량, 힘
     {
         float p_defense = playerdefense;//초기값 저장
         float dmg = playerdmg;
-        float e_stat = enemystat;
-        //인덱스를 열거형을 int형으로 형변환해 사용
-        int index = (int)WindType - 1;
 
+        //인덱스를 열거형을 int형으로 형변환해 사용
+        int index = WindType - 1;
 
         //float형 배열의 인덱스를 위에서 형변환한 int형 사용
 
-        //p_defense = new float[4]
-        //{ player.defense + (player.defense / 2),player.defense - (player.defense / 2) , playerdefense, playerdefense }[index];
+        p_defense = new float[4]
+        { player.defense + (player.defense / 2),player.defense - (player.defense / 2) , playerdefense, playerdefense }[index];
 
-        //dmg = new float[4]
-        //    {player.dmg - (player.dmg / 4), 0, playerdmg, playerdmg}[index];
+        dmg = new float[4]
+            {player.dmg - (player.dmg / 2), player.dmg + (player.dmg / 2), playerdmg, playerdmg}[index];
 
-        //e_stat = new float[]
-        //{ enemy.defense + (enemy.defense / 4), 0, enemy.defense, enemy.defense }[index];
-
-
-        //switch (WindType)//강풍과 돌풍은 추가예정
-        //{
-        //    case WindType.Contrarywind://역풍
-        //        rb.AddForce(dir * force, ForceMode2D.Force);
-        //        player.defense = p_defense;
-        //        player.dmg = dmg;
-        //        enemy.defense = e_stat;
-        //        //현재 플레이어의 방어력 + (현재 플레이어의 방어력/2)
-        //        break;
-        //    case ewindtype.fairwind://순풍
-        //        rb.AddForce(dir * force, ForceMode2D.Force);
-        //        player.defense = p_defense;
-        //        player.dmg = dmg;
-        //        enemy.dmg = e_stat;
-
-        //        break;
-        //    case ewindtype.sirocco://열풍
-        //        rb.AddForce(dir * force, ForceMode2D.Force);
-
-        //        break;
-        //    case ewindtype.coldwind://냉풍
-        //        rb.AddForce(dir * force, ForceMode2D.Force);
-
-        //        break;
-        //}
+        if(ObjType == EObjType.player)
+        {
+            switch (WindType)//강풍과 돌풍은 추가예정
+            {
+                case 1:// 역풍
+                    rb.AddForce(dir * force, ForceMode2D.Force);
+                    player.defense = p_defense;
+                    player.dmg = dmg;
+                    //현재 플레이어의 방어력 + (현재 플레이어의 방어력/2)
+                    break;
+                case 2://순풍
+                    rb.AddForce(dir * force, ForceMode2D.Force);
+                    player.defense = p_defense;
+                    player.dmg = dmg;
+                    break;
+                case 3://열풍
+                    rb.AddForce(dir * force, ForceMode2D.Force);
+                    break;
+                case 4://냉풍
+                    rb.AddForce(dir * force, ForceMode2D.Force);
+                    break;
+            }
+        }
 
     }
     public void EnemyWind()
