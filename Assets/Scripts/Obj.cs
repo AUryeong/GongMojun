@@ -7,7 +7,7 @@ public class Obj : MonoBehaviour
 {
 
     public bool isWind = true;
-    protected int intwindtype = (int)EWindType.Contrarywind;
+  
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
