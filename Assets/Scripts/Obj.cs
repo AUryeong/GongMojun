@@ -5,32 +5,20 @@ using UnityEngine;
 
 public class Obj : MonoBehaviour
 {
-    [SerializeField]
-    protected float Dmg;
-    [SerializeField]
-    protected float atspd;
-    [SerializeField]
-    protected float defense;
-    [SerializeField]
-    protected float stamina;
-    [SerializeField]
-    protected float Speed;
-    [SerializeField]
-    protected float JumpSpeed;
-
 
     public bool isWind = true;
-    public int intwindtype = (int)EWindType.Contrarywind;
+    protected int intwindtype = (int)EWindType.Contrarywind;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Wind"))
+        if (collision.CompareTag("Wind"))
         {
             isWind = true;
         }
     }
-    private void FixedUpdate()
+    protected void FixedUpdate()
     {
+        #region 바람종류 바꾸기 키입력
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             intwindtype = (int)EWindType.Contrarywind;
@@ -55,8 +43,6 @@ public class Obj : MonoBehaviour
         {
             intwindtype = (int)EWindType.Squall;
         }
-        
+        #endregion
     }
-   
-
 }

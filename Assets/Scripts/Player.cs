@@ -7,7 +7,13 @@ public class Player : Obj
 {
 
     [Header("플레이어 스탯")]
-    
+   
+    public float dmg;
+    public float atspd;
+    public float defense;
+    public float maxStamina;
+    public float Speed;
+    public float JumpSpeed;
 
 
     [Space(20f)]
@@ -22,8 +28,8 @@ public class Player : Obj
 
     public enum EWindDir//E는 (enum타입이라서 명시)
     {
-        Right,
-        Left
+        Right = 1,
+        Left = -1
     }
     public enum EIsWind
     {
@@ -40,6 +46,13 @@ public class Player : Obj
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
     }
+    //public void SetStat(float dmg , float atspd, float Speed, float defense)
+    //{
+    //    this.dmg = dmg;
+    //    this.atspd = atspd;
+    //    this.Speed = Speed;
+    //    this.defense = defense;
+    //}
 
     void Update()
     {
@@ -87,6 +100,32 @@ public class Player : Obj
         {
             rigid.AddForce(Vector2.left * 10);
         }
-    }
+    //    #region 바람종류 바꾸기 키입력
+    //    if (Input.GetKeyDown(KeyCode.Alpha0))
+    //    {
+    //        intwindtype = (int)EWindType.Contrarywind;
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.Alpha1))
+    //    {
+    //        intwindtype = (int)EWindType.Fairwind;
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.Alpha2))
+    //    {
+    //        intwindtype = (int)EWindType.Sirocco;
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.Alpha3))
+    //    {
+    //        intwindtype = (int)EWindType.Coldwind;
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.Alpha4))
+    //    {
+    //        intwindtype = (int)EWindType.Gale;
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.Alpha5))
+    //    {
+    //        intwindtype = (int)EWindType.Squall;
+    //    }
+    //    #endregion
+    //}
 
 }
