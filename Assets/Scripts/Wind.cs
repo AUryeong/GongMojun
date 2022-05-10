@@ -59,7 +59,7 @@ public class Wind : MonoBehaviour
             isdir = true;
         }
         #endregion
-        
+
         #region 바람종류 바꾸기 키입력
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
@@ -91,11 +91,11 @@ public class Wind : MonoBehaviour
     {
         if (collision.CompareTag("Player") && collision.CompareTag("Enemy"))
         {
-            WindFnc(EObjType.player, intwindtype, dir, player.defense, player.dmg);
-
+            PlayerWind(intwindtype, dir, player.defense, player.dmg);
+            EnemyWind();
         }
     }
-    public void WindFnc(EObjType ObjType, int WindType, Vector2 dir, float playerdefense, float playerdmg, float force = 1)//바람의 종류, 방량, 힘
+    public void PlayerWind(int WindType, Vector2 dir, float playerdefense, float playerdmg, float force = 1)//바람의 종류, 방량, 힘
     {
         float p_defense = playerdefense;//초기값 저장
         float dmg = playerdmg;
@@ -111,29 +111,29 @@ public class Wind : MonoBehaviour
         dmg = new float[4]
             {player.dmg - (player.dmg / 2), player.dmg + (player.dmg / 2), playerdmg, playerdmg}[index];
 
-        if(ObjType == EObjType.player)
+
+
+        switch (WindType)//강풍과 돌풍은 추가예정
         {
-            switch (WindType)//강풍과 돌풍은 추가예정
-            {
-                case 1:// 역풍
-                    rb.AddForce(dir * force, ForceMode2D.Force);
-                    player.defense = p_defense;
-                    player.dmg = dmg;
-                    //현재 플레이어의 방어력 + (현재 플레이어의 방어력/2)
-                    break;
-                case 2://순풍
-                    rb.AddForce(dir * force, ForceMode2D.Force);
-                    player.defense = p_defense;
-                    player.dmg = dmg;
-                    break;
-                case 3://열풍
-                    rb.AddForce(dir * force, ForceMode2D.Force);
-                    break;
-                case 4://냉풍
-                    rb.AddForce(dir * force, ForceMode2D.Force);
-                    break;
-            }
+            case 1:// 역풍
+                rb.AddForce(dir * force, ForceMode2D.Force);
+                player.defense = p_defense;
+                player.dmg = dmg;
+                //현재 플레이어의 방어력 + (현재 플레이어의 방어력/2)
+                break;
+            case 2://순풍
+                rb.AddForce(dir * force, ForceMode2D.Force);
+                player.defense = p_defense;
+                player.dmg = dmg;
+                break;
+            case 3://열풍
+                rb.AddForce(dir * force, ForceMode2D.Force);
+                break;
+            case 4://냉풍
+                rb.AddForce(dir * force, ForceMode2D.Force);
+                break;
         }
+
 
     }
     public void EnemyWind()
