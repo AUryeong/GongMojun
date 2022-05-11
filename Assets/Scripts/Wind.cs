@@ -10,15 +10,11 @@ public enum EWindType
     Gale,//강풍
     Squall//돌풍
 }
-public enum EObjType
-{
-    player,
-    enemy
-}
 public class Wind : MonoBehaviour
 {
     private EWindType windtype = EWindType.Contrarywind;
 
+    [HideInInspector]
     public Vector2 dir;
 
     private Rigidbody2D rb;
@@ -26,9 +22,34 @@ public class Wind : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
     }
-    private void Start()
+    private void FixedUpdate()
     {
-
+        #region 바람종류 바꾸기 키입력
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            windtype = EWindType.Contrarywind;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            windtype = EWindType.Fairwind;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            windtype = EWindType.Sirocco;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            windtype = EWindType.Coldwind;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            windtype = EWindType.Gale;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            windtype = EWindType.Squall;
+        }
+        #endregion
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -48,12 +69,8 @@ public class Wind : MonoBehaviour
         int index = (int)WindType - 1;
 
         //float형 배열의 인덱스를 위에서 형변환한 int형 사용
-
         //Dmg = new float[4]
         //    {player.dmg - (player.dmg / 2), player.dmg + (player.dmg / 2), dmg, dmg}[index];
-
-
-
         switch (WindType)//강풍과 돌풍은 추가예정
         {
             #region 바람종류에 따른 효과
@@ -104,7 +121,5 @@ public class Wind : MonoBehaviour
                 break;
                 #endregion
         }
-
-
     }
 }
