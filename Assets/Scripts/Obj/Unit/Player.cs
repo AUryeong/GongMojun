@@ -72,7 +72,7 @@ public class Player : Unit
         if ((Input.GetKey(KeyCode.D) && rb.velocity.x > 0.2f) || (Input.GetKey(KeyCode.A) && rb.velocity.x < -0.2f))
         {
             animator.SetBool("IsWalking", true);
-            animator.speed = Mathf.Abs(rb.velocity.x) / 20;
+            animator.speed = 1+ Mathf.Abs(rb.velocity.x) / 30;
         }
         else
         {

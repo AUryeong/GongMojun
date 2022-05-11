@@ -103,23 +103,23 @@ public class Wind : Singleton<Wind>
         {
             if(obj is Player)
             {
-                obj.Rb.AddForce(Vector2.right * WindPower * 2, ForceMode2D.Force);
+                obj.Rb.AddForce(Vector2.right * WindPower, ForceMode2D.Force);
             }
             else
             {
-                obj.Rb.AddForce(Vector2.right * WindPower, ForceMode2D.Force);
+                obj.Rb.AddForce(Vector2.right * WindPower * 2, ForceMode2D.Force);
             }
         }
         else if (direction == Direction.Left)
         {
             if (obj is Player)
             {
-                obj.Rb.AddForce(Vector2.left * WindPower * 2, ForceMode2D.Force);
+                obj.Rb.AddForce(Vector2.left * WindPower, ForceMode2D.Force);
             }
             else
             {
                 
-                obj.Rb.AddForce(Vector2.left * WindPower, ForceMode2D.Force);
+                obj.Rb.AddForce(Vector2.left * WindPower * 2, ForceMode2D.Force);
             }
         }
         else if (direction == Direction.Up)
