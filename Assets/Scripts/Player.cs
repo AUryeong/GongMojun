@@ -1,16 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class Player : Unit
 {
-
-    [Header("플레이어 스탯")]
-
-    
-
-
     [Space(20f)]
 
     Rigidbody2D rigid;
@@ -32,19 +23,11 @@ public class Player : Unit
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
     }
-    //public void SetStat(float dmg , float atspd, float Speed, float defense)
-    //{
-    //    this.dmg = dmg;
-    //    this.atspd = atspd;
-    //    this.Speed = Speed;
-    //    this.defense = defense;
-    //}
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
-            rigid.AddForce(Vector2.up * Speed * JumpSpeed * 100);
+            rigid.AddForce(Vector2.up * spd * jumpSpeed * 100);
         }
         if (Input.GetKeyDown(KeyCode.F))
         {
@@ -62,12 +45,12 @@ public class Player : Unit
         base.FixedUpdate();
         if (Input.GetKey(KeyCode.D))
         {
-            rigid.AddForce(Vector2.right * Speed);
+            rigid.AddForce(Vector2.right * spd);
             spriteRenderer.flipX = false;
         }
         else if (Input.GetKey(KeyCode.A))
         {
-            rigid.AddForce(Vector2.left * Speed);
+            rigid.AddForce(Vector2.left * spd);
             spriteRenderer.flipX = true;
         }
         if ((Input.GetKey(KeyCode.D) && rigid.velocity.x > 0.2f) || (Input.GetKey(KeyCode.A) && rigid.velocity.x < -0.2f))

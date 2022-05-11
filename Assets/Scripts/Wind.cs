@@ -39,9 +39,10 @@ public class Wind : MonoBehaviour
     }
     public void UnitWind(EWindType WindType, Unit unit)//바람의 종류, 방량, 힘
     {
-        
-        float Defense = unit.defense;//초기값 저장
-        float Dmg = unit.dmg;
+
+        float Defense = unit.defaultDfs;
+        float Dmg = unit.defaultDmg;
+        float Gravity = unit.defaultGvScale;
 
         //인덱스를 열거형을 int형으로 형변환해 사용
         int index = (int)WindType - 1;
@@ -55,30 +56,53 @@ public class Wind : MonoBehaviour
 
         switch (WindType)//강풍과 돌풍은 추가예정
         {
+            #region 바람종류에 따른 효과
             case EWindType.Contrarywind:// 역풍
-             
+
                 unit.dmg = Dmg;
                 if (unit is Player)
                 {
-                    unit.defense = Defense + (Defense / 2);
+                    unit.dfs = Defense + (Defense / 2);
+                    unit.dmg = Dmg - (Dmg / 2);
                 }
                 else if (unit is Enemy)
                 {
-                    unit.defense = Defense + (Defense / 2);
+                    unit.dfs = Defense + (Defense / 4);
                 }
-                //현재 플레이어의 방어력 + (현재 플레이어의 방어력/2)
                 break;
             case EWindType.Fairwind://순풍
-             
-                unit.defense = Defense - (Defense / 2);
-                //unit.dmg = dmg;
+                if (unit is Player)
+                {
+                    unit.dfs = Defense - (Defense / 2);
+                    unit.dmg = Dmg + (Dmg / 2);
+                }
+                else if (unit is Enemy)
+                {
+                    unit.dmg = Dmg + (Dmg / 4);
+                }
+
                 break;
             case EWindType.Sirocco://열풍
-             
+                if(unit is Player)
+                {
+                    unit.gvScale = Gravity - (Gravity / 2);
+                }
+                else if(unit is Enemy)
+                {
+                    unit.gvScale = Gravity - (Gravity / 4);
+                }
                 break;
             case EWindType.Coldwind://냉풍
-             
+                if(unit is Player)
+                {
+                    unit.gvScale = Gravity + (Gravity / 2);
+                }
+                else if(unit is Enemy)
+                {
+                    unit.gvScale = Gravity + (Gravity / 4);
+                }
                 break;
+                #endregion
         }
 
 
