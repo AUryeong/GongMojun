@@ -1,125 +1,140 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public enum EWindType
+public class Wind : Singleton<Wind>
 {
-    Contrarywind = 1,//역풍
-    Fairwind,//순풍
-    Sirocco,//열풍
-    Coldwind,//냉풍
-    Gale,//강풍
-    Squall//돌풍
-}
-public class Wind : MonoBehaviour
-{
-    private EWindType windtype = EWindType.Contrarywind;
-
-    [HideInInspector]
-    public Vector2 dir;
-
-    private Rigidbody2D rb;
-    private void Awake()
+    public Direction direction;
+    [SerializeField]
+    List<Obj> ObjsinCamera = new List<Obj>();
+    public float WindPower;
+    public void ChangeDirection(Direction direction)
     {
-        rb = GetComponent<Rigidbody2D>();
+        this.direction = direction;
     }
-    private void FixedUpdate()
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        #region 바람종류 바꾸기 키입력
-        if (Input.GetKeyDown(KeyCode.Alpha0))
+        if(collision.gameObject != null)
         {
-            windtype = EWindType.Contrarywind;
+            Obj obj = collision.GetComponent<Obj>();
+            if(obj != null && !ObjsinCamera.Contains(obj))
+            {
+                ObjsinCamera.Add(obj);
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha1))
+    }
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject != null)
         {
-            windtype = EWindType.Fairwind;
+            Obj obj = collision.GetComponent<Obj>();
+            if (obj != null && ObjsinCamera.Contains(obj))
+            {
+                ObjsinCamera.Remove(obj);
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
+    }
+    void FixedUpdate()
+    {
+        foreach(Obj obj in ObjsinCamera)
         {
-            windtype = EWindType.Sirocco;
+            ApplyWind(obj);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
+    }
+    void ApplyWind(Obj obj)//바람의 종류, 방량, 힘
+    {
+        #region 유닛 스텟 변경
+        if (obj is Unit)
         {
-            windtype = EWindType.Coldwind;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            windtype = EWindType.Gale;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            windtype = EWindType.Squall;
+            Unit unit = (obj as Unit);
+            float Defense = unit.defaultDfs;
+            float Dmg = unit.defaultDmg;
+            float Gravity = unit.GravityScale;
+
+            if (direction == Direction.Up)
+            {
+                if (unit is Player)
+                {
+                    unit.Rb.gravityScale = Gravity - (Gravity / 2);
+                }
+                else if (unit is Enemy)
+                {
+                    unit.Rb.gravityScale = Gravity - (Gravity / 4);
+                }
+            }
+            else if (direction == Direction.Down)
+            {
+                if (unit is Player)
+                {
+                    unit.Rb.gravityScale = Gravity + (Gravity / 2);
+                }
+                else if (unit is Enemy)
+                {
+                    unit.Rb.gravityScale = Gravity + (Gravity / 4);
+                }
+            }
+            else if (unit.direction != direction)
+            {
+                unit.Dmg = Dmg;
+                if (unit is Player)
+                {
+                    unit.Dfs = Defense + (Defense / 2);
+                    unit.Dmg = Dmg - (Dmg / 2);
+                }
+                else if (unit is Enemy)
+                {
+                    unit.Dfs = Defense + (Defense / 4);
+                }
+            }
+            else
+            {
+                if (unit is Player)
+                {
+                    unit.Dfs = Defense - (Defense / 2);
+                    unit.Dmg = Dmg + (Dmg / 2);
+                }
+                else if (unit is Enemy)
+                {
+                    unit.Dmg = Dmg + (Dmg / 4);
+                }
+            }
         }
         #endregion
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player") || collision.CompareTag("Enemy"))
+        if(direction == Direction.Right)
         {
-            UnitWind(windtype, collision.GetComponent<Unit>());
+            if(obj is Player)
+            {
+                obj.Rb.AddForce(Vector2.right * WindPower * 2, ForceMode2D.Force);
+            }
+            else
+            {
+                obj.Rb.AddForce(Vector2.right * WindPower, ForceMode2D.Force);
+            }
         }
-    }
-    public void UnitWind(EWindType WindType, Unit unit)//바람의 종류, 방량, 힘
-    {
-
-        float Defense = unit.defaultDfs;
-        float Dmg = unit.defaultDmg;
-        float Gravity = unit.defaultGvScale;
-
-        //인덱스를 열거형을 int형으로 형변환해 사용
-        int index = (int)WindType - 1;
-
-        //float형 배열의 인덱스를 위에서 형변환한 int형 사용
-        //Dmg = new float[4]
-        //    {player.dmg - (player.dmg / 2), player.dmg + (player.dmg / 2), dmg, dmg}[index];
-        switch (WindType)//강풍과 돌풍은 추가예정
+        else if (direction == Direction.Left)
         {
-            #region 바람종류에 따른 효과
-            case EWindType.Contrarywind:// 역풍
-
-                unit.dmg = Dmg;
-                if (unit is Player)
-                {
-                    unit.dfs = Defense + (Defense / 2);
-                    unit.dmg = Dmg - (Dmg / 2);
-                }
-                else if (unit is Enemy)
-                {
-                    unit.dfs = Defense + (Defense / 4);
-                }
-                break;
-            case EWindType.Fairwind://순풍
-                if (unit is Player)
-                {
-                    unit.dfs = Defense - (Defense / 2);
-                    unit.dmg = Dmg + (Dmg / 2);
-                }
-                else if (unit is Enemy)
-                {
-                    unit.dmg = Dmg + (Dmg / 4);
-                }
-
-                break;
-            case EWindType.Sirocco://열풍
-                if(unit is Player)
-                {
-                    unit.gvScale = Gravity - (Gravity / 2);
-                }
-                else if(unit is Enemy)
-                {
-                    unit.gvScale = Gravity - (Gravity / 4);
-                }
-                break;
-            case EWindType.Coldwind://냉풍
-                if(unit is Player)
-                {
-                    unit.gvScale = Gravity + (Gravity / 2);
-                }
-                else if(unit is Enemy)
-                {
-                    unit.gvScale = Gravity + (Gravity / 4);
-                }
-                break;
-                #endregion
+            if (obj is Player)
+            {
+                obj.Rb.AddForce(Vector2.left * WindPower * 2, ForceMode2D.Force);
+            }
+            else
+            {
+                
+                obj.Rb.AddForce(Vector2.left * WindPower, ForceMode2D.Force);
+            }
+        }
+        else if (direction == Direction.Up)
+        {
+            if (!(obj is Unit))
+            {
+                obj.Rb.AddForce(Vector2.up * WindPower * 2.5f, ForceMode2D.Force);
+            }
+        }
+        else if (direction == Direction.Down)
+        {
+            if (!(obj is Unit))
+            {
+                obj.Rb.AddForce(Vector2.down * WindPower * 2.5f, ForceMode2D.Force);
+            }
         }
     }
 }
