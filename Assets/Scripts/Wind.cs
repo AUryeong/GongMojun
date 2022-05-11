@@ -1,110 +1,140 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public enum EWindType
+public class Wind : Singleton<Wind>
 {
-    Contrarywind = 1,//¿ªÇ³
-    Fairwind,//¼øÇ³
-    Sirocco,//¿­Ç³
-    Coldwind,//³ÃÇ³
-    Gale,//°­Ç³
-    Squall//µ¹Ç³
-}
-public enum EObjType
-{
-    player,
-    enemy
-}
-public class Wind : MonoBehaviour
-{
-    private EWindType windtype = EWindType.Contrarywind;
-
-    public Vector2 dir;
-
-    private Rigidbody2D rb;
-    private void Awake()
+    public Direction direction;
+    [SerializeField]
+    List<Obj> ObjsinCamera = new List<Obj>();
+    public float WindPower;
+    public void ChangeDirection(Direction direction)
     {
-        rb = GetComponent<Rigidbody2D>();
+        this.direction = direction;
     }
-    private void Start()
+    void OnTriggerEnter2D(Collider2D collision)
     {
-
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player") || collision.CompareTag("Enemy"))
+        if(collision.gameObject != null)
         {
-            UnitWind(windtype, collision.GetComponent<Unit>());
+            Obj obj = collision.GetComponent<Obj>();
+            if(obj != null && !ObjsinCamera.Contains(obj))
+            {
+                ObjsinCamera.Add(obj);
+            }
         }
     }
-    public void UnitWind(EWindType WindType, Unit unit)//¹Ù¶÷ÀÇ Á¾·ù, ¹æ·®, Èû
+    void OnTriggerExit2D(Collider2D collision)
     {
-
-        float Defense = unit.defaultDfs;
-        float Dmg = unit.defaultDmg;
-        float Gravity = unit.defaultGvScale;
-
-        //ÀÎµ¦½º¸¦ ¿­°ÅÇüÀ» intÇüÀ¸·Î Çüº¯È¯ÇØ »ç¿ë
-        int index = (int)WindType - 1;
-
-        //floatÇü ¹è¿­ÀÇ ÀÎµ¦½º¸¦ À§¿¡¼­ Çüº¯È¯ÇÑ intÇü »ç¿ë
-
-        //Dmg = new float[4]
-        //    {player.dmg - (player.dmg / 2), player.dmg + (player.dmg / 2), dmg, dmg}[index];
-
-
-
-        switch (WindType)//°­Ç³°ú µ¹Ç³Àº Ãß°¡¿¹Á¤
+        if (collision.gameObject != null)
         {
-            #region ¹Ù¶÷Á¾·ù¿¡ µû¸¥ È¿°ú
-            case EWindType.Contrarywind:// ¿ªÇ³
+            Obj obj = collision.GetComponent<Obj>();
+            if (obj != null && ObjsinCamera.Contains(obj))
+            {
+                ObjsinCamera.Remove(obj);
+            }
+        }
+    }
+    void FixedUpdate()
+    {
+        foreach(Obj obj in ObjsinCamera)
+        {
+            ApplyWind(obj);
+        }
+    }
+    void ApplyWind(Obj obj)//¹Ù¶÷ÀÇ Á¾·ù, ¹æ·®, Èû
+    {
+        #region À¯´Ö ½ºÅÝ º¯°æ
+        if (obj is Unit)
+        {
+            Unit unit = (obj as Unit);
+            float Defense = unit.defaultDfs;
+            float Dmg = unit.defaultDmg;
+            float Gravity = unit.GravityScale;
 
-                unit.dmg = Dmg;
+            if (direction == Direction.Up)
+            {
                 if (unit is Player)
                 {
-                    unit.dfs = Defense + (Defense / 2);
-                    unit.dmg = Dmg - (Dmg / 2);
+                    unit.Rb.gravityScale = Gravity - (Gravity / 2);
                 }
                 else if (unit is Enemy)
                 {
-                    unit.dfs = Defense + (Defense / 4);
+                    unit.Rb.gravityScale = Gravity - (Gravity / 4);
                 }
-                break;
-            case EWindType.Fairwind://¼øÇ³
+            }
+            else if (direction == Direction.Down)
+            {
                 if (unit is Player)
                 {
-                    unit.dfs = Defense - (Defense / 2);
-                    unit.dmg = Dmg + (Dmg / 2);
+                    unit.Rb.gravityScale = Gravity + (Gravity / 2);
                 }
                 else if (unit is Enemy)
                 {
-                    unit.dmg = Dmg + (Dmg / 4);
+                    unit.Rb.gravityScale = Gravity + (Gravity / 4);
                 }
-
-                break;
-            case EWindType.Sirocco://¿­Ç³
-                if(unit is Player)
+            }
+            else if (unit.direction != direction)
+            {
+                unit.Dmg = Dmg;
+                if (unit is Player)
                 {
-                    unit.gvScale = Gravity - (Gravity / 2);
+                    unit.Dfs = Defense + (Defense / 2);
+                    unit.Dmg = Dmg - (Dmg / 2);
                 }
-                else if(unit is Enemy)
+                else if (unit is Enemy)
                 {
-                    unit.gvScale = Gravity - (Gravity / 4);
+                    unit.Dfs = Defense + (Defense / 4);
                 }
-                break;
-            case EWindType.Coldwind://³ÃÇ³
-                if(unit is Player)
+            }
+            else
+            {
+                if (unit is Player)
                 {
-                    unit.gvScale = Gravity + (Gravity / 2);
+                    unit.Dfs = Defense - (Defense / 2);
+                    unit.Dmg = Dmg + (Dmg / 2);
                 }
-                else if(unit is Enemy)
+                else if (unit is Enemy)
                 {
-                    unit.gvScale = Gravity + (Gravity / 4);
+                    unit.Dmg = Dmg + (Dmg / 4);
                 }
-                break;
-                #endregion
+            }
         }
-
-
+        #endregion
+        if(direction == Direction.Right)
+        {
+            if(obj is Player)
+            {
+                obj.Rb.AddForce(Vector2.right * WindPower * 2, ForceMode2D.Force);
+            }
+            else
+            {
+                obj.Rb.AddForce(Vector2.right * WindPower, ForceMode2D.Force);
+            }
+        }
+        else if (direction == Direction.Left)
+        {
+            if (obj is Player)
+            {
+                obj.Rb.AddForce(Vector2.left * WindPower * 2, ForceMode2D.Force);
+            }
+            else
+            {
+                
+                obj.Rb.AddForce(Vector2.left * WindPower, ForceMode2D.Force);
+            }
+        }
+        else if (direction == Direction.Up)
+        {
+            if (!(obj is Unit))
+            {
+                obj.Rb.AddForce(Vector2.up * WindPower * 2.5f, ForceMode2D.Force);
+            }
+        }
+        else if (direction == Direction.Down)
+        {
+            if (!(obj is Unit))
+            {
+                obj.Rb.AddForce(Vector2.down * WindPower * 2.5f, ForceMode2D.Force);
+            }
+        }
     }
 }

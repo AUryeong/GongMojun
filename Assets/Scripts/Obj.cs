@@ -5,23 +5,18 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Obj : MonoBehaviour
 {
-    Rigidbody2D rb;
+    protected Rigidbody2D rb;
 
-    public bool isWind = true;
-    [SerializeField]
-    private Wind wind;
-    [SerializeField]
-    private float force = 1;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public Rigidbody2D Rb
     {
-        if (collision.CompareTag("Wind"))
-        {
-            isWind = true;
-        }
+        get { return rb; }
     }
-    protected virtual void FixedUpdate()
+
+
+    void Awake()
     {
-        rb.AddForce(wind.dir * force, ForceMode2D.Force);
+        rb = GetComponent<Rigidbody2D>();
     }
+
 }
