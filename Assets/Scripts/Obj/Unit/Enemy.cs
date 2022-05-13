@@ -9,6 +9,11 @@ public abstract class Enemy : Unit
 
     /// <summary>공격중임?</summary>
     protected bool isAttack;
+    protected bool isAttacking;
+
+    float time = 0;
+
+
 
 
     [SerializeField]
@@ -19,22 +24,46 @@ public abstract class Enemy : Unit
     protected abstract void Attack();
 
     protected abstract void Move();
-    
+
+    protected void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player") && time >=Atspd)
+        {
+            time = 0;
+            isAttacking = true;
+        }
+    }
+    protected void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            isAttacking = false;
+        }
+    }
     void FixedUpdate()
     {
+        
+        time = Time.deltaTime;
         Debug.DrawRay(Vector3.zero, dir, Color.red);
+        raycast = Physics2D.Raycast(Vector3.zero, dir, 4, LayerMask.GetMask("Player"));
 
         //공격중이 아니라면
         if (!isAttack)
         {
             Move();
         }
-        else
+        else if(isAttack && isAttacking)
         {
             Attack();
         }
-
-        raycast = Physics2D.Raycast(Vector3.zero, dir, 4);
+        if (raycast)
+        {
+            isAttack = true;
+        }
+        else
+        {
+            isAttack = false;
+        }
     }
     public void LRMove()
     {
@@ -42,7 +71,7 @@ public abstract class Enemy : Unit
     }
     private IEnumerator CMove()
     {
-        
+
         if (dir == Vector3.right)
         {
             dir = Vector3.left;
@@ -55,8 +84,9 @@ public abstract class Enemy : Unit
         }
         yield return new WaitForSeconds(changeDirDel);
     }
-    public void GetAttack()
+    public void GetAttack(Unit unit)
     {
         
     }
+    
 }
