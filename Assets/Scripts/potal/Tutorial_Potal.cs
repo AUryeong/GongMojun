@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class potal : MonoBehaviour
+public class Tutorial_Potal : MonoBehaviour
 {
     
     GameObject player;
@@ -30,11 +30,17 @@ public class potal : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")  Coll = true;    
+        if (collision.gameObject.tag == "Player")
+        {
+            Coll = true;
+        }      
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player") Coll = false;
+        if (collision.gameObject.tag == "Player") {
+
+            Coll = false;
+        }
     }
 }
 
